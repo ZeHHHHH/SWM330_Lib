@@ -31,6 +31,7 @@ int main(void)
 	PORT_Init(PORTE, PIN15, PORTE_PIN15_ADC0_CH14,0);
 	
 	ADC_initStruct.clkdiv = 10;
+	ADC_initStruct.refsrc = ADC_REF_VDD;
 	ADC_initStruct.samplAvg = ADC_AVG_SAMPLE1;
 	ADC_initStruct.EOC_IEn = ADC_SEQ0;	
 	ADC_initStruct.HalfIEn = 0;

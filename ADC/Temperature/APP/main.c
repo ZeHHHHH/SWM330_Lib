@@ -20,6 +20,7 @@ int main(void)
 	SYS->TEMPCR |= SYS_TEMPCR_EN_Msk;
 	
 	ADC_initStruct.clkdiv = 10;
+	ADC_initStruct.refsrc = ADC_REF_VDD;
 	ADC_initStruct.samplAvg = ADC_AVG_SAMPLE1;
 	ADC_initStruct.EOC_IEn = 0;
 	ADC_initStruct.HalfIEn = 0;

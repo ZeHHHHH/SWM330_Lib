@@ -420,8 +420,6 @@ typedef struct {
 #define SYS_ADCCR_IVREN_Msk			(0x01 << SYS_ADCCR_IVREN_Pos)
 #define SYS_ADCCR_IVRSEL_Pos		1		// ADC Internal Vref Select
 #define SYS_ADCCR_IVRSEL_Msk		(0x01 << SYS_ADCCR_IVRSEL_Pos)
-#define SYS_ADCCR_IVRTRIM_Pos		8		// ADC Internal Vref Level Trimming
-#define SYS_ADCCR_IVRTRIM_Msk		(0x1F << SYS_ADCCR_IVRTRIM_Pos)
 
 #define SYS_TEMPCR_EN_Pos			0
 #define SYS_TEMPCR_EN_Msk			(0x01 << SYS_TEMPCR_EN_Pos)

@@ -78,20 +78,20 @@ void Flash_Param_at_xMHz(uint32_t xMHz)
 {
 	__disable_irq();
 	
-	IAP_Flash_ParamTAC(5, 0x0B11FFAC);
+	IAP_Flash_ParamTAC(6, 0x0B11FFAC);
 	
 	IAP_Flash_Param(1000 / xMHz, 0x0B11FFAC);
 	
 	if(xMHz < 48)
-		IAP_Flash_ParamTAC(0, 0x0B11FFAC);
-	else if(xMHz < 76)
 		IAP_Flash_ParamTAC(1, 0x0B11FFAC);
-	else if(xMHz < 102)
+	else if(xMHz < 76)
 		IAP_Flash_ParamTAC(2, 0x0B11FFAC);
-	else if(xMHz < 128)
+	else if(xMHz < 102)
 		IAP_Flash_ParamTAC(3, 0x0B11FFAC);
-	else if(xMHz < 152)
+	else if(xMHz < 128)
 		IAP_Flash_ParamTAC(4, 0x0B11FFAC);
+	else if(xMHz < 152)
+		IAP_Flash_ParamTAC(5, 0x0B11FFAC);
 	
 	__enable_irq();
 }

@@ -33,13 +33,13 @@ uint32_t FLASH_Erase(uint32_t addr)
 {
 	if(addr % 1024 != 0) return FLASH_RES_ERR;
 	
-	__disable_irq();
+	uint32_t primask = SW_enter_critical();
 	
 	IAP_Flash_Erase(addr/1024, 0x0B11FFAC);
 	
 	FLASH_CacheClear();
 	
-	__enable_irq();
+	SW_exit_critical(primask);
 	
 	return FLASH_RES_OK;
 }
@@ -57,13 +57,13 @@ uint32_t FLASH_Write(uint32_t addr, uint32_t buff[], uint32_t count)
 	if(addr % 16 != 0) return FLASH_RES_ERR;
 	if(count % 4 != 0) return FLASH_RES_ERR;
 	
-	__disable_irq();
+	uint32_t primask = SW_enter_critical();
 	
 	IAP_Flash_Write(addr, (uint32_t)buff, count/4, 0x0B11FFAC);
 	
 	FLASH_CacheClear();
 	
-	__enable_irq();
+	SW_exit_critical(primask);
 	
 	return FLASH_RES_OK;
 }
@@ -76,7 +76,7 @@ uint32_t FLASH_Write(uint32_t addr, uint32_t buff[], uint32_t count)
 *******************************************************************************************************************************/
 void Flash_Param_at_xMHz(uint32_t xMHz)
 {
-	__disable_irq();
+	uint32_t primask = SW_enter_critical();
 	
 	IAP_Flash_ParamTAC(6, 0x0B11FFAC);
 	
@@ -93,5 +93,5 @@ void Flash_Param_at_xMHz(uint32_t xMHz)
 	else if(xMHz < 152)
 		IAP_Flash_ParamTAC(5, 0x0B11FFAC);
 	
-	__enable_irq();
+	SW_exit_critical(primask);
 }

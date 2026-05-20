@@ -34,7 +34,7 @@ int main(void)
 	{
 		QSPI1_Master_Write((uint8_t *)Wrbuf, N_HALF*2);
 		
-		for(int i = 0; i < SystemCoreClock; i++) __NOP();
+		SW_DelayMS(2000);
 		
 		for(int i = 0; i < N_HALF; i++)
 			Wrbuf[i] += 1;

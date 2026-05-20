@@ -206,7 +206,7 @@ void SleepTest(void)
 	
 	printf("Is in Sleep: %s\n", PSRAM_IsSleep() ? "Yes" : "No");
 	
-	for(int i = 0; i < SystemCoreClock; i++) __NOP();
+	SW_DelayMS(4000);
 	
 	PSRAM_SleepExit();
 	
@@ -232,7 +232,7 @@ void PowerDownTest(void)
 	
 	printf("Is in PowerDown: %s\n", PSRAM_IsPowerDown() ? "Yes" : "No");
 	
-	for(int i = 0; i < SystemCoreClock; i++) __NOP();
+	SW_DelayMS(4000);
 	
 	PSRAM_PowerDownExit();
 	

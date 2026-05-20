@@ -49,7 +49,7 @@ int main(void)
 		{
 			UG_FillCircle(200, 200, 50, colors[i]);
 			
-			for(int j = 0; j < SystemCoreClock/4; j++) __NOP();
+			SW_DelayMS(1000);
 		}
 	}
 }

@@ -39,9 +39,9 @@ int main(void)
 	while(1==1)
 	{
 		GPIO_SetBit(GPIOA, PIN5);					// turn on the LED
-		for(int i = 0; i < SystemCoreClock; i++) __NOP();
+		SW_DelayMS(2000);
 		GPIO_ClrBit(GPIOA, PIN5);					// turn off the LED
-		for(int i = 0; i < SystemCoreClock; i++) __NOP();
+		SW_DelayMS(2000);
 		
 		printf("Enter stop mode\n");
 		RTC->PWRCR |= (1 << RTC_PWRCR_STOP_Pos);	// enter STOP mode

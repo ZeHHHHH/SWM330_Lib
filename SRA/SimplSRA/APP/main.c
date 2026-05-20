@@ -175,7 +175,7 @@ void test_SRA(uint16_t img_width, uint16_t img_height, uint16_t scl_width, uint1
 		while(DMA2D_IsBusy()) __NOP();
 	}
 	
-	for(int i = 0; i < SystemCoreClock / 8; i++) __NOP();
+	SW_DelayMS(500);
 }
 
 

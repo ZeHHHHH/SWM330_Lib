@@ -63,7 +63,7 @@ int main(void)
 	{		
 		for(i = 0; i < 3; i++)
 		{
-			for(j = 0; j < SystemCoreClock/20; j++) __NOP();
+			SW_DelayMS(500);
 			
 			UG_FillFrame(60, 75, 200, 150, color[i]);
 		}
@@ -77,7 +77,7 @@ void RGBLCDInit(void)
 	
 	GPIO_Init(GPIOE, PIN15, 1, 0, 0, 0);	// LCD hardware reset
 	GPIO_ClrBit(GPIOE, PIN15);
-	for(int i = 0; i < CyclesPerUs*1000; i++) __NOP();
+	SW_DelayMS(10);
 	GPIO_SetBit(GPIOE, PIN15);
 	
 	PORT_Init(PORTB, PIN7,  PORTB_PIN7_LCD_VS,  0);

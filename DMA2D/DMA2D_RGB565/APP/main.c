@@ -77,7 +77,7 @@ void test_PixelFill(void)
 	
 	while(DMA2D_IsBusy()) __NOP();
 	
-	for(int i = 0; i < SystemCoreClock/8; i++) __NOP();
+	SW_DelayMS(500);
 	
 	/* Draw a 150*150 green square in the upper left corner */
 	outLayer.Address = (uint32_t)LCD_Buffer;
@@ -89,7 +89,7 @@ void test_PixelFill(void)
 	
 	while(DMA2D_IsBusy()) __NOP();
 	
-	for(int i = 0; i < SystemCoreClock/8; i++) __NOP();
+	SW_DelayMS(500);
 	
 	/* Draw a 150*150 red square in the lower right corner */
 	outLayer.Address = (uint32_t)LCD_Buffer + (LCD_HDOT * (LCD_VDOT - 150) + (LCD_HDOT - 150)) * 2;
@@ -101,7 +101,7 @@ void test_PixelFill(void)
 	
 	while(DMA2D_IsBusy()) __NOP();
 	
-	for(int i = 0; i < SystemCoreClock/8; i++) __NOP();
+	SW_DelayMS(500);
 }
 
 
@@ -123,7 +123,7 @@ void test_PixelMove(void)
 	
 	while(DMA2D_IsBusy()) __NOP();
 	
-	for(int i = 0; i < SystemCoreClock/8; i++) __NOP();
+	SW_DelayMS(500);
 	
 	/* Draw a 128*128 picture in the lower right corner */
 	outLayer.Address = (uint32_t)LCD_Buffer + (LCD_HDOT * (LCD_VDOT - 128) + (LCD_HDOT - 128)) * 2;
@@ -134,7 +134,7 @@ void test_PixelMove(void)
 	
 	while(DMA2D_IsBusy()) __NOP();
 	
-	for(int i = 0; i < SystemCoreClock/8; i++) __NOP();
+	SW_DelayMS(500);
 }
 
 
@@ -168,7 +168,7 @@ void test_PixelBlend(void)
 	
 	while(DMA2D_IsBusy()) __NOP();
 	
-	for(int i = 0; i < SystemCoreClock/8; i++) __NOP();
+	SW_DelayMS(500);
 }
 
 
@@ -180,7 +180,7 @@ void test_DMA2D_memcpy(void)
 	for(int i = 0; i < LCD_VDOT * LCD_HDOT; i++)
 		LCD_Buffer[i] = 0xAAAA;
 	
-	for(int i = 0; i < SystemCoreClock/8; i++) __NOP();
+	SW_DelayMS(500);
 	
 	LCD->L[0].ADDR = (uint32_t)Img_Buffer;
 	

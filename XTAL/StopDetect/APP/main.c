@@ -12,7 +12,7 @@ int main(void)
 	
 	SerialInit();
 	
-	for(int i = 0; i < SystemCoreClock/4; i++) __NOP();	// Wait for the crystal to stabilize, to prevent misidentification of crystal vibration stop during power-on
+	SW_DelayMS(1000);	// Wait for the crystal to stabilize, to prevent misidentification of crystal vibration stop during power-on
 	
 	SYS->XTALSR = SYS_XTALSR_STOPDET_Msk | SYS_XTALSR_STOP_Msk;	// XTAL Stop Detect enable, and clear STOP flag
 	
@@ -23,7 +23,7 @@ int main(void)
 	{
 		printf("SystemCoreClock = %d\r\n", SystemCoreClock);
 		
-		for(int i = 0; i < SystemCoreClock/4; i++) __NOP();
+		SW_DelayMS(1000);
 	}
 }
 

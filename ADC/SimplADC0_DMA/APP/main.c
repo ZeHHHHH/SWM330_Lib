@@ -77,7 +77,7 @@ int main(void)
 			printf("%4d,", ADC_Result[i] & ADC_DR_VALUE_Msk);
 		}
 		
-		for(int i = 0; i < SystemCoreClock/4; i++) __NOP();
+		SW_DelayMS(1000);
 	}
 }
 

@@ -45,7 +45,7 @@ int main(void)
 	{
 		NT35510_DMAWrite((uint32_t *)Buffer, 400, sizeof(Buffer) / 2 / NT35510_HPIX);
 		
-		for(int i = 0; i < SystemCoreClock / 100; i++) __NOP();
+		SW_DelayMS(200);
 	}
 }
 
@@ -64,7 +64,7 @@ void MPULCDInit(void)
 	
 	GPIO_Init(GPIOE, PIN15, 1, 0, 0, 0);	// LCD hardware reset
 	GPIO_ClrBit(GPIOE, PIN15);
-	for(int i = 0; i < CyclesPerUs*1000; i++) __NOP();
+	SW_DelayMS(10);
 	GPIO_SetBit(GPIOE, PIN15);
 	
 	PORT_Init(PORTB, PIN7,  PORTB_PIN7_LCD_CS,  0);

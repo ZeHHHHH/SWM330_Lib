@@ -36,9 +36,9 @@ int main(void)
 	while(1==1)
 	{
 		GPIO_SetBit(GPIOA, PIN5);					// turn on the LED
-		for(int i = 0; i < SystemCoreClock; i++) __NOP();
+		SW_DelayMS(2000);
 		GPIO_ClrBit(GPIOA, PIN5);					// turn off the LED
-		for(int i = 0; i < SystemCoreClock; i++) __NOP();
+		SW_DelayMS(2000);
 		
 		printf("Enter sleeping\n");
 		__disable_irq();

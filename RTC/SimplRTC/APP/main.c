@@ -25,7 +25,7 @@ int main(void)
 		RTC_GetDateTime(RTC, &dateTime);
 		printf("Now Time: %02d : %02d\r\n", dateTime.Minute, dateTime.Second);
 		
-		for(int i = 0; i < SystemCoreClock/4; i++) __NOP();
+		SW_DelayMS(1000);
 	}
 }
 

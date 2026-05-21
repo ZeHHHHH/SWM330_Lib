@@ -37,7 +37,7 @@ int main(void)
 	SPI_initStruct.RXThresholdIEn = 0;
 	SPI_initStruct.TXThreshold = 0;
 	SPI_initStruct.TXThresholdIEn = 0;
-	SPI_initStruct.TXCompleteIEn = 0;
+	SPI_initStruct.TXCompleteIEn = 1;	// 对于主机，发送完成即接收完成；对于从机，可使用 SPI_IT_CS_RISE 处理接收完成
 	SPI_Init(SPI0, &SPI_initStruct);
 	SPI_Open(SPI0);
 	
@@ -54,7 +54,7 @@ int main(void)
 	DMA_initStruct.PeripheralAddrInc = 0;
 	DMA_initStruct.Handshake = DMA_CH1_SPI0RX;
 	DMA_initStruct.Priority = DMA_PRI_LOW;
-	DMA_initStruct.INTEn = DMA_IT_DONE;
+	DMA_initStruct.INTEn = 0;
 	DMA_CH_Init(DMA_CH1, &DMA_initStruct);
 	DMA_CH_Open(DMA_CH1);
 	
@@ -71,7 +71,7 @@ int main(void)
 	DMA_initStruct.PeripheralAddrInc = 0;
 	DMA_initStruct.Handshake = DMA_CH0_SPI0TX;
 	DMA_initStruct.Priority = DMA_PRI_LOW;
-	DMA_initStruct.INTEn = DMA_IT_DONE;
+	DMA_initStruct.INTEn = 0;
 	DMA_CH_Init(DMA_CH0, &DMA_initStruct);
 	DMA_CH_Open(DMA_CH0);
 	
@@ -84,23 +84,21 @@ int main(void)
 }
 
 
-void DMA_Handler(void)
+void SPI0_Handler(void)
 {
-	if(DMA_CH_INTStat(DMA_CH0, DMA_IT_DONE))
+	if(SPI_INTStat(SPI0, SPI_IT_TX_DONE))
 	{
-		DMA_CH_INTClr(DMA_CH0, DMA_IT_DONE);
-	}
-	else if(DMA_CH_INTStat(DMA_CH1, DMA_IT_DONE))
-	{
-		DMA_CH_INTClr(DMA_CH1, DMA_IT_DONE);
+		SPI_INTClr(SPI0, SPI_IT_TX_DONE);
 		
+		int rx_count = BUF_SIZE - DMA_CH_GetRemaining(DMA_CH1);
 		char rx_buffer[BUF_SIZE] = {0};
-		memcpy(rx_buffer, RX_Buffer, BUF_SIZE);
+		memcpy(rx_buffer, RX_Buffer, rx_count);
 		
 		memset(RX_Buffer, 0x00, sizeof(RX_Buffer));
-		DMA_CH_Open(DMA_CH1);	// restart, transfer agian
+		DMA_CH_Close(DMA_CH1);
+		DMA_CH_Open(DMA_CH1);	// 接收下一帧数据
 		
-		for(int i = 0; i < BUF_SIZE; i++) printf("%c", rx_buffer[i]);
+		for(int i = 0; i < rx_count; i++) printf("%c", rx_buffer[i]);
 	}
 }
 

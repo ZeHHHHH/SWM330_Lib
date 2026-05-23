@@ -324,6 +324,19 @@ void switchToXTAL_32K(void)
 }
 
 
+void SW_DelayUS(uint32_t us)
+{
+	us = CyclesPerUs * us / 4;
+	
+	for(int i = 0; i < us; i++) __NOP();
+}
+
+void SW_DelayMS(uint32_t ms)
+{
+	for(int i = 0; i < ms; i++) SW_DelayUS(1000);
+}
+
+
 /*******************************************************************************************************************************
 * @brief	1.8V LDO (Power for PSRAM and PE0-11, PE14, PA5 pin) turn on
 * @param	clksrc is RTC clock source, can be RTC_CLKSRC_LRC32K or RTC_CLKSRC_XTAL32K

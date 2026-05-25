@@ -1,13 +1,14 @@
 #include "SWM330.h"
 
 
+/* Use asymmetric center alignment mode, keep duty cycle unchanged and realize phase shift function */
+
+
 int main(void)
 {
 	PWM_InitStructure  PWM_initStruct;
 	
 	SystemInit();
-	
-	GPIO_INIT(GPIOA, PIN5, GPIO_OUTPUT);		// debug indication pin
 	
 	PORT_Init(PORTA, PIN12, FUNMUX0_PWM0A_OUT,  0);
 	PORT_Init(PORTA, PIN13, FUNMUX1_PWM0AN_OUT, 0);
@@ -45,46 +46,72 @@ int main(void)
 	PWM_Init(PWM0, &PWM_initStruct);
 	PWM_Init(PWM1, &PWM_initStruct);
 	
+	PWM_IntEn(PWM1, PWM_IT_OVF_DOWN);
+	NVIC_EnableIRQ(PWM1_IRQn);
+	
 	PWM_Start(PWM0_MSK|PWM1_MSK);
 	
 	while(1==1)
 	{
-		PWMG->RELOADEN = 0x00;		// working register reload disable and ensure that all registers are updated at same time.
-		
-		/* Use asymmetric center alignment mode, keep duty cycle unchanged and realize phase shift function */
-		if(PWM1->CMPA2 == 0)
-		{
-			PWM1->CMPA = 2500;
-			PWM1->CMPA2 = 2500;
-			PWM1->CMPB = 7500;
-			PWM1->CMPB2 = 7500;
-		}
-		else
-		{
-			PWM1->CMPA += 250;		// increase high level duration of the first half cycle
-			PWM1->CMPA2 -= 250;		// decrease high level duration of the second half cycle, the high level shifts to the right
-			PWM1->CMPB += 750;
-			PWM1->CMPB2 -= 750;
-		}
-		
-		if(PWM0->CMPA == 0)
-		{
-			PWM0->CMPA = 2500;
-			PWM0->CMPA2 = 2500;
-			PWM0->CMPB = 7500;
-			PWM0->CMPB2 = 7500;
-		}
-		else
-		{
-			PWM0->CMPA -= 250;		// decrease high level duration of the first half cycle
-			PWM0->CMPA2 += 250;		// increase high level duration of the second half cycle, the high level shifts to the left
-			PWM0->CMPB -= 750;
-			PWM0->CMPB2 += 750;
-		}
-		
-		PWMG->RELOADEN = 0x3F;
-		
-		SW_DelayMS(100);
 	}
 }
 
+
+void PWM1_Handler(void)
+{
+	static int dir = 0;
+	static int n = 0;
+	
+	if(PWM_IntStat(PWM1, PWM_IT_OVF_DOWN))
+	{
+		PWM_IntClr(PWM1, PWM_IT_OVF_DOWN);
+		
+		if(++n == 2)
+			n = 0;
+		else
+			return;
+		
+		PWMG->RELOADEN = 0x00;		// working register reload disable and ensure that all registers are updated at same time.
+		
+		if(dir == 0)
+		{
+			if(PWM1->CMPA2 == 0)
+			{
+				PWM1->CMPA = 2500;
+				PWM1->CMPA2 = 2500;
+				PWM1->CMPB = 7500;
+				PWM1->CMPB2 = 7500;
+				
+				dir = 1;
+			}
+			else
+			{
+				PWM1->CMPA += 250;		// increase high level duration of the first half cycle
+				PWM1->CMPA2 -= 250;		// decrease high level duration of the second half cycle, the high level shifts to the right
+				PWM1->CMPB += 750;
+				PWM1->CMPB2 -= 750;
+			}
+		}
+		else
+		{
+			if(PWM1->CMPA == 0)
+			{
+				PWM1->CMPA = 2500;
+				PWM1->CMPA2 = 2500;
+				PWM1->CMPB = 7500;
+				PWM1->CMPB2 = 7500;
+				
+				dir = 0;
+			}
+			else
+			{
+				PWM1->CMPA -= 250;		// decrease high level duration of the first half cycle
+				PWM1->CMPA2 += 250;		// increase high level duration of the second half cycle, the high level shifts to the left
+				PWM1->CMPB -= 750;
+				PWM1->CMPB2 += 750;
+			}
+		}
+		
+		PWMG->RELOADEN = 0x3F;
+	}
+}

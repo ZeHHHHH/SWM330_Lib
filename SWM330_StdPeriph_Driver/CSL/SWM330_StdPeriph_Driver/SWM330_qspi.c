@@ -561,6 +561,28 @@ uint32_t QSPI_ReadReg(QSPI_TypeDef * QSPIx, uint8_t cmd, uint8_t n_bytes)
 }
 
 
+void QSPI_ReadRegEx(QSPI_TypeDef * QSPIx, uint8_t cmd, uint8_t n_dummy, uint8_t *buffer, uint8_t n_bytes)
+{
+	QSPI_CmdStructure cmdStruct;
+	QSPI_CmdStructClear(&cmdStruct);
+	
+	cmdStruct.InstructionMode 	 = QSPI_PhaseMode_1bit;
+	cmdStruct.Instruction 		 = cmd;
+	cmdStruct.AddressMode 		 = QSPI_PhaseMode_None;
+	cmdStruct.AlternateBytesMode = QSPI_PhaseMode_None;
+	cmdStruct.DummyCycles 		 = n_dummy;
+	cmdStruct.DataMode 			 = QSPI_PhaseMode_1bit;
+	cmdStruct.DataCount 		 = n_bytes;
+	
+	QSPI_Command(QSPIx, QSPI_Mode_IndirectRead, &cmdStruct);
+	
+	while(QSPI_FIFOCount(QSPIx) < n_bytes) __NOP();
+	
+	for(int i = 0; i < n_bytes; i++)
+		buffer[i] = QSPIx->DRB;
+}
+
+
 /*******************************************************************************************************************************
 * @brief	SPI Flash register write
 * @param	QSPIx is the QSPI to use

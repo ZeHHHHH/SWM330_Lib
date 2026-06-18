@@ -166,7 +166,11 @@ void QSPI_Erase_(QSPI_TypeDef * QSPIx, uint32_t addr, uint16_t block_size, uint8
 	case 4:
 		instruction = (AddressSize == QSPI_PhaseSize_32bit) ? QSPI_C4B_ERASE_SECTOR    : QSPI_CMD_ERASE_SECTOR;
 		break;
-	
+    
+	case 32:
+		instruction = (AddressSize == QSPI_PhaseSize_32bit) ? QSPI_C4B_ERASE_BLOCK32KB : QSPI_CMD_ERASE_BLOCK32KB;
+		break;
+    
 	case 64:
 		instruction = (AddressSize == QSPI_PhaseSize_32bit) ? QSPI_C4B_ERASE_BLOCK64KB : QSPI_CMD_ERASE_BLOCK64KB;
 		break;
